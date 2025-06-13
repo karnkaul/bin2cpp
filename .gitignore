@@ -8,3 +8,5 @@ out/*
 CMakeSettings.json
 compile_commands.json
 /CMakeUserPresets.json
+
+/test_data

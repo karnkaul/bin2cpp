@@ -32,7 +32,6 @@ class Writer {
 		begin_ns({});
 		begin_array(bytes.size());
 		for (auto const byte : bytes) { write_next(byte); }
-		flush_buffer();
 		end_array();
 		end_ns({});
 		api();
@@ -67,14 +66,15 @@ class Writer {
 	}
 
 	void begin_array(std::size_t const size) {
-		std::format_to(std::back_inserter(m_buffer), "auto const g_bytes = std::array<unsigned char, {}>{{", size + 1);
+		std::format_to(std::back_inserter(m_buffer), "auto const g_bytes = std::array<unsigned char, {}>{{", size);
 		++m_indent;
 		flush_buffer();
 	}
 
 	void end_array() {
-		m_buffer.append("};");
 		--m_indent;
+		flush_buffer();
+		m_buffer.append("};");
 		flush_buffer();
 	}
 
