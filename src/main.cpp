@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 struct Config {
 	std::string_view ns{};
-	std::string_view fn_name{"get_bytes"};
+	std::string_view fn{"get_bytes"};
 	std::int32_t col_width{120};
 };
 
@@ -99,7 +99,7 @@ class Writer {
 
 	void api() {
 		std::println();
-		std::format_to(std::back_inserter(m_buffer), "auto {}() -> std::span<std::byte const> {{", m_config.fn_name);
+		std::format_to(std::back_inserter(m_buffer), "auto {}() -> std::span<std::byte const> {{", m_config.fn);
 		++m_indent;
 		flush_buffer();
 
@@ -128,9 +128,9 @@ auto run(int argc, char** argv) -> int {
 	auto config = Config{};
 	auto path = std::string_view{};
 	auto const args = std::array{
-		klib::args::named_option(config.fn_name, "f,func-name", "name of API function"),
-		klib::args::named_option(config.ns, "n,namespace", "name of API namespace"),
-		klib::args::named_option(config.col_width, "c,col-width", "column width"),
+		klib::args::named_option(config.ns, "n,namespace", "API namespace (default: [none])"),
+		klib::args::named_option(config.fn, "f,function", "API function (default: get_bytes)"),
+		klib::args::named_option(config.col_width, "c,col-width", "column width (default: 120)"),
 		klib::args::positional_required(path, "IN"),
 	};
 	auto const parse_result = klib::args::parse_main(parse_info, args, argc, argv);
